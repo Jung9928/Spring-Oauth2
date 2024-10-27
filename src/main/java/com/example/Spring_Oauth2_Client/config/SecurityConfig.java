@@ -1,5 +1,6 @@
 package com.example.Spring_Oauth2_Client.config;
 
+import com.example.Spring_Oauth2_Client.jwt.JWTFilter;
 import com.example.Spring_Oauth2_Client.jwt.JWTUtil;
 import com.example.Spring_Oauth2_Client.oauth2.CustomSuccessHandler;
 import com.example.Spring_Oauth2_Client.service.CustomOAuth2UserService;
@@ -10,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -64,6 +66,10 @@ public class SecurityConfig {
         // Http Basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
+
+        // JWTFilter 추가
+        http
+                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 
         // oauth2
         http
